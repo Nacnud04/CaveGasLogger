@@ -38,6 +38,27 @@ void setup() {
   
 }
 
-void loop() {
+long hi, lo, CO2;
+int measureCO2() {
+  mySerial.write(hexData, 9);
+  for (int i = 0, j = 0; i < 9; i++) {
+    if (mySerial.available() > 0) {
+      int ch = mySerial.read();
+      if (i == 2) {
+        hi = ch;    // high concentration
+      }
+      if (i == 3) {
+        lo = ch;    // low concentration
+      }
+      if (i == 8) {
+        CO2 = hi * 256 + lo; // true CO2 concentration
+      }
+    }
+  }
+  return CO2;
+}
 
+void loop() {
+  Serial.println(measureCO2());
+  delay(1000);
 }
