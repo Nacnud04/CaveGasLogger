@@ -74,11 +74,6 @@ void getTime() {
   */
 }
 
-int getSec() {
-  sTime = rtc.getRTCTime();
-  return sTime.second;
-}
-
 int pSec = -1;
 bool timeSet = false;
 byte year;
