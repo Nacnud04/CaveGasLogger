@@ -151,7 +151,7 @@ public:
    * @param day 1~31
    * @return None
    */
-  void setAlarm(uint16_t year, uint8_t month, uint8_t day);
+  //void setAlarm(uint16_t year, uint8_t month, uint8_t day);
   /**
    * @fn setAlarm
    * @brief Set the Alarmnumber object
@@ -165,7 +165,7 @@ public:
    * @param minute 0~59
    * @param second 0~59
    */
-  void setAlarm(uint8_t week,uint8_t hour, uint8_t minute, uint8_t second);
+  //void setAlarm(uint8_t week,uint8_t hour, uint8_t minute, uint8_t second);
 
   /**
    * @brief Get internal temperature of the clock
@@ -182,7 +182,7 @@ public:
   /**
    * @brief Clear alarm flag bit
    */
-  void clearAlarm(void);
+  //void clearAlarm(void);
 
   /**
    * @fn getAMorPM

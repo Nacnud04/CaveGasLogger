@@ -1,16 +1,20 @@
-#include <SoftwareSerial.h>
+#include <SoftwareSerial.h> // for CO2 sensor
+#include <SD.h> // SD card library
 
 #include "DFRobot_SD3031.h" // package for RTC
 #include "DFRobot_OxygenSensor.h" // package for O2 Sensor
 
 // init UART for CO2 sensor
-SoftwareSerial mySerial(10, 11); // RX TX
+SoftwareSerial mySerial(8, 9); // RX TX
 // hex data to retrieve a measurement from CO2 Sensor
 unsigned char hexData[9] = {0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x79};
 
 // init sensor/module classes
 DFRobot_SD3031 rtc;
 DFRobot_OxygenSensor oxygen;
+
+// init file variable
+File dataFile;
 
 // define parameters for O2 sensor
 #define oxygen_addr ADDRESS_3 // loaded in from O2 package = 0x73
@@ -23,23 +27,38 @@ void setup() {
   while (!Serial) {
   }
   mySerial.begin(9600);
-  Serial.println("CO2 sensor successfully initalized");
+  Serial.println(F("CO2 sensor successfully initalized"));
   // test & init RTC
   while (rtc.begin() != 0) {
-    Serial.println("Failed to initalize RTC");
+    Serial.println(F("Failed to initalize RTC"));
   }
   rtc.setHourSystem(rtc.e24hours);
-  Serial.println("RTC successfully initalized");
+  Serial.println(F("RTC successfully initalized"));
   // test & init O2 sensor
   while (!oxygen.begin(oxygen_addr)) {
-    Serial.println("Failed to initalize O2 sensor");
+    Serial.println(F("Failed to initalize O2 sensor"));
   }
-  Serial.println("O2 sensor successfully initalized");
+  Serial.println(F("O2 sensor successfully initalized"));
+  // test & init SD card
+  if (!SD.begin(4)) {
+    Serial.println(F("Failed to initalize SD card"));
+    while (1);
+  }
+  Serial.println(F("SD Card sucessfully initalized"));
 }
 
 sTimeData_t sTime;
+byte dateTime[6] = {0, 0, 0, 0, 0};
 void getTime() {
   sTime = rtc.getRTCTime();
+  dateTime[0] = sTime.year - 2000;
+  dateTime[1] = sTime.month;
+  dateTime[2] = sTime.day;
+  dateTime[3] = sTime.hour;
+  dateTime[4] = sTime.minute;
+  dateTime[5] = sTime.second;
+
+  /*
   Serial.print(sTime.year, DEC);//year
   Serial.print('/');
   Serial.print(sTime.month, DEC);//month
@@ -52,6 +71,7 @@ void getTime() {
   Serial.print(':');
   Serial.print(sTime.second, DEC);//second
   Serial.println(' ');
+  */
 }
 
 int getSec() {
@@ -149,13 +169,19 @@ float measureO2() {
   return O2;
 }
 
+String filepath = "";
+
 void loop() {
-  if (pSec != getSec()) {
+  getTime();
+  filepath = dateTime[0] + String("-") + dateTime[1] + String("-") + dateTime[2] + String(".csv");
+  if (pSec != dateTime[5]) {
+    Serial.print("CO2:");
     Serial.print(measureCO2());
-    Serial.print(" | ");
-    Serial.println(measureO2());
-    getTime();
-    pSec = getSec();
+    Serial.print("ppm | O2: ");
+    Serial.print(measureO2());
+    Serial.println(String("% @ ")+dateTime[3]+String("-")+dateTime[4]+String("-")+dateTime[5]);
+    
+    pSec = dateTime[5];
   }
   //check to see if time needs to be updated
   if (Serial.available() && (timeSet == false)) {

@@ -124,6 +124,7 @@ sTimeData_t DFRobot_SD3031::getRTCTime(void)
   return sTime;
 
 }
+/*
 void DFRobot_SD3031::setAlarm(uint16_t year, uint8_t month, uint8_t day)
 {
   uint8_t buffer[8];
@@ -176,7 +177,7 @@ void DFRobot_SD3031::setAlarm(uint8_t week, uint8_t hour, uint8_t minute, uint8_
   buffer[7]=0x0f;
   writeReg(SD3031_REG_ALARM_SEC, buffer, 8);
 }
-
+*/
 
 int8_t DFRobot_SD3031::getTemperatureC(void)
 {
@@ -198,13 +199,13 @@ float DFRobot_SD3031::getVoltage(void)
   ret = data / 100.0;
   return ret;
 }
-
+/*
 void DFRobot_SD3031::clearAlarm(void)
 {
   uint8_t buffer[2];
   readReg(SD3031_REG_CTR1, buffer, 1);
 }
-
+*/
 
 uint8_t DFRobot_SD3031::writeReg(uint8_t reg, void* pBuf, size_t size)
 {
