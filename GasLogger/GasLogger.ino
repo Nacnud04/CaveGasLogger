@@ -48,7 +48,7 @@ void setup() {
 }
 
 sTimeData_t sTime;
-byte dateTime[6] = {0, 0, 0, 0, 0};
+byte dateTime[6] = {0, 0, 0, 0, 0, 0};
 void getTime() {
   sTime = rtc.getRTCTime();
   dateTime[0] = sTime.year - 2000;
@@ -57,21 +57,6 @@ void getTime() {
   dateTime[3] = sTime.hour;
   dateTime[4] = sTime.minute;
   dateTime[5] = sTime.second;
-
-  /*
-  Serial.print(sTime.year, DEC);//year
-  Serial.print('/');
-  Serial.print(sTime.month, DEC);//month
-  Serial.print('/');
-  Serial.print(sTime.day, DEC);//day
-  Serial.print(' ');
-  Serial.print(sTime.hour, DEC);//hour
-  Serial.print(':');
-  Serial.print(sTime.minute, DEC);//minute
-  Serial.print(':');
-  Serial.print(sTime.second, DEC);//second
-  Serial.println(' ');
-  */
 }
 
 int pSec = -1;
