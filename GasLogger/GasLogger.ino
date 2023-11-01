@@ -178,8 +178,8 @@ void loop() {
     Serial.print(measureCO2());
     Serial.print("ppm | O2: ");
     Serial.print(measureO2());
-    Serial.println(String("% @ ")+dateTime[3]+String("-")+dateTime[4]+String("-")+dateTime[5]);
-    dataFile.println(dateTime[3]+String("-")+dateTime[4]+String("-")+dateTime[5]+String(",")+measureCO2()+String(",")+measureO2());
+    Serial.println(String("% @ ")+dateTime[3]+String(":")+dateTime[4]+String(":")+dateTime[5]);
+    dataFile.println(dateTime[3]+String(":")+dateTime[4]+String(":")+dateTime[5]+String(",")+measureCO2()+String(",")+measureO2());
     pSec = dateTime[5];
   }
   
