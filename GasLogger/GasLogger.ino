@@ -149,20 +149,40 @@ float measureO2() {
   return O2;
 }
 
+String current_file = "";
 String filepath = "";
 
 void loop() {
   getTime();
+  // open and write to a new file every day
   filepath = dateTime[0] + String("-") + dateTime[1] + String("-") + dateTime[2] + String(".csv");
+  if ((filepath != current_file) && (22 < dateTime[0] < 26) && (0 < dateTime[1] < 13) && (0 < dateTime[2] < 32)) {
+    current_file = filepath;
+    if (dataFile) {
+      dataFile.close();
+    }
+    dataFile = SD.open(current_file, FILE_WRITE);
+    Serial.println(F("Writing new file"));
+    dataFile.println(F("DTM, CO2(ppm), O2(%)"));
+  }
+  
+  // every 30 seconds write out data by closing and opening file
+  if (dateTime[5] % 30 == 0) {
+    dataFile.close();
+    dataFile = SD.open(current_file, FILE_WRITE);
+  }
+  
+  // capture and write out data
   if (pSec != dateTime[5]) {
     Serial.print("CO2:");
     Serial.print(measureCO2());
     Serial.print("ppm | O2: ");
     Serial.print(measureO2());
     Serial.println(String("% @ ")+dateTime[3]+String("-")+dateTime[4]+String("-")+dateTime[5]);
-    
+    dataFile.println(dateTime[3]+String("-")+dateTime[4]+String("-")+dateTime[5]+String(",")+measureCO2()+String(",")+measureO2());
     pSec = dateTime[5];
   }
+  
   //check to see if time needs to be updated
   if (Serial.available() && (timeSet == false)) {
     setTime(year, month, date, dOW, hour, minute, second);
