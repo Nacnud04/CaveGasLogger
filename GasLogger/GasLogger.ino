@@ -156,7 +156,7 @@ void loop() {
   getTime();
   // open and write to a new file every day
   filepath = dateTime[0] + String("-") + dateTime[1] + String("-") + dateTime[2] + String(".csv");
-  if ((filepath != current_file) && (22 < dateTime[0] < 26) && (0 < dateTime[1] < 13) && (0 < dateTime[2] < 32)) {
+  if ((filepath != current_file) && (22 < dateTime[0] < 26) && (0 < dateTime[1] < 13) && (0 < dateTime[2] < 32) && (0 <= dateTime[3] < 24) && (0 <= dateTime[4] < 60) && (0 <= dateTime[5] < 60)) {
     current_file = filepath;
     if (dataFile) {
       dataFile.close();
