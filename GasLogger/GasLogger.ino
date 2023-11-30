@@ -173,7 +173,7 @@ void loop() {
   }
   
   // capture and write out data
-  if (pSec != dateTime[5]) {
+  if (pSec % 20 == 0) {
     Serial.print("CO2:");
     Serial.print(measureCO2());
     Serial.print("ppm | O2: ");
